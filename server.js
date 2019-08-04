@@ -21,7 +21,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/',(req,res) => { res.send(db.users) });
+app.get('/',(req,res) => { res.send("working") });
 
 app.post('/signin',(req,res) =>{
     const { email, password } = req.body;
