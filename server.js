@@ -101,6 +101,6 @@ app.post('/profile',(req,res) =>{
     .catch(err => res.status(400).json('error getting user'))
 });
 
-app.listen(3001, () =>{
-    console.log('server running')
+app.listen(process.env.PORT || 3001, () =>{
+    console.log(`server running on port {process.env.PORT}`)
 })
