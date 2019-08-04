@@ -8,8 +8,8 @@ const knex = require('knex');
 const db = knex({
   client: 'pg',
   connection: {
-    connectionString : 'postgresql-trapezoidal-32775',
-    ssl : true,
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
   }
 });
 
