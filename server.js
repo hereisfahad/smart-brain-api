@@ -27,10 +27,6 @@ const app = express();
 app.use(cors());
 app.use(express.json({ extended: false }));
 
-// app.get("/", (req, res) => {
-//   res.send("working");
-// });
-
 app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -45,7 +41,6 @@ app.post("/signin", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
     }
-    // console.log(user);
     res.json(user);
   } catch (error) {
     res.send(error.message);
@@ -63,14 +58,12 @@ app.post("/register", async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "user already exists" }] });
     }
     password = await bcrypt.hash(password, 10);
-    // console.log(password);
     user = new User({
       name,
       email,
       password
     });
     await user.save();
-    // console.log(user);
     res.send(user);
   } catch (error) {
     res.status(500).json(error.message);
@@ -78,11 +71,10 @@ app.post("/register", async (req, res) => {
 });
 
 app.put("/image", async (req, res) => {
-  // console.log(req.body);
-  const { email } = req.body.email;
+  const { id } = req.body;
   try {
-    let user = await User.findOneAndUpdate({ email }, { $inc: { entries: 1 } });
-    user = await User.findOne({ email }); //this returns the updated state
+    await User.findOneAndUpdate({ _id: id }, { $inc: { entries: 1 } });
+    let user = await User.findById({ _id: id }); //this returns the updated state
     return res.send({ entries: user.entries });
   } catch (e) {
     console.log(e);
@@ -90,21 +82,7 @@ app.put("/image", async (req, res) => {
   }
 });
 
-// app.post("/profile", (req, res) => {
-//   const { id } = req.params;
-//   db.select("*")
-//     .from("users")
-//     .where({ id })
-//     .then(user => {
-//       if (user.length) {
-//         res.json(user[0]);
-//       } else {
-//         res.status(400).json("Not found");
-//       }
-//     })
-//     .catch(err => res.status(400).json("error getting user"));
-// });
-const PORT = process.env.PORT;
-app.listen(PORT || 3001, () => {
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
 });
