@@ -104,7 +104,7 @@ app.put("/image", async (req, res) => {
 //     })
 //     .catch(err => res.status(400).json("error getting user"));
 // });
-
-app.listen(3001, () => {
-  console.log(`server running on port 3001`);
+const PORT = process.env.PORT;
+app.listen(PORT || 3001, () => {
+  console.log(`server running on port ${PORT}`);
 });
