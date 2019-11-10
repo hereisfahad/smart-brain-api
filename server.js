@@ -81,8 +81,8 @@ app.put("/image", async (req, res) => {
   // console.log(req.body);
   const { id } = req.body.id;
   try {
-    await User.findOneAndUpdate({ id }, { $inc: { entries: 1 } });
-    let user = await User.findOne({ id }); //this returns the updated state
+    let user = await User.findOneAndUpdate({ id }, { $inc: { entries: 1 } });
+    user = await User.findOne({ id }); //this returns the updated state
     return res.send({ entries: user.entries });
   } catch (e) {
     console.log(e);
