@@ -11,7 +11,8 @@ const connectDB = async () => {
       {
         useNewUrlParser: true,
         useCreateIndex: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
       }
     );
 
@@ -45,7 +46,6 @@ app.post("/signin", async (req, res) => {
       return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
     }
     // console.log(user);
-
     res.json(user);
   } catch (error) {
     res.send(error.message);
@@ -77,17 +77,18 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// app.put("/image", (req, res) => {
-//   const { id } = req.body;
-//   db("users")
-//     .where("id", "=", id)
-//     .increment("entries", 1)
-//     .returning("entries")
-//     .then(entries => {
-//       res.json(entries[0]);
-//     })
-//     .catch(err => res.status(400).json("inable to get entries"));
-// });
+app.put("/image", async (req, res) => {
+  // console.log(req.body);
+  const { id } = req.body.id;
+  try {
+    await User.findOneAndUpdate({ id }, { $inc: { entries: 1 } });
+    let user = await User.findOne({ id }); //this returns the updated state
+    return res.send({ entries: user.entries });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ errors: [{ msg: "could'nt fetch rank" }] });
+  }
+});
 
 // app.post("/profile", (req, res) => {
 //   const { id } = req.params;
