@@ -79,10 +79,10 @@ app.post("/register", async (req, res) => {
 
 app.put("/image", async (req, res) => {
   // console.log(req.body);
-  const { id } = req.body.id;
+  const { email } = req.body.email;
   try {
-    let user = await User.findOneAndUpdate({ id }, { $inc: { entries: 1 } });
-    user = await User.findOne({ id }); //this returns the updated state
+    let user = await User.findOneAndUpdate({ email }, { $inc: { entries: 1 } });
+    user = await User.findOne({ email }); //this returns the updated state
     return res.send({ entries: user.entries });
   } catch (e) {
     console.log(e);
