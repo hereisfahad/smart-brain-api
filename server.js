@@ -81,7 +81,17 @@ app.put("/image", async (req, res) => {
     res.status(500).json({ errors: [{ msg: "could'nt fetch rank" }] });
   }
 });
-
+app.post("/delete", async (req, res) => {
+  const { id } = req.body;
+  try {
+    await User.deleteOne({ _id: id });
+    // let user = await User.findById({ _id: id }); //this returns the updated state
+    return res.status(200).json({ msg: " user deleted succesfully" });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ errors: [{ msg: "could'nt delete user" }] });
+  }
+});
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
